@@ -112,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
               child: Center(
             child: ListView.builder(
+              reverse: true,
               itemCount: historyMovement.length,
               itemBuilder: (context, index) {
                 Map movment = historyMovement[index];
@@ -120,6 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text("Number: ${index + 1}"),
                         Text("Longitude: ${movment["longitude"]}"),
                         Text("Latitude: ${movment["latitude"]}"),
                         Text("Speed: ${movment["speed"]} KM/J")
