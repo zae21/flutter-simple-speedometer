@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:bg_service/data/utility/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:location/location.dart';
@@ -52,37 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
     // print("altitude ${locationData.altitude}");
     // print("speed ${locationData.speed}");
     setState(() {
-      currentSpeed = locationData.speed;
+      currentSpeed = locationData.speed ?? 0.0;
       box.write("historyMovement", historyMovement);
     });
-  }
-
-  double mstoKmh(double speed) {
-    double conversion = 3.6;
-    double result = speed * conversion;
-    return result;
-  }
-
-  Color speedColor(double speed) {
-    Color result = Colors.black;
-    if (speed < 40) {
-      result = Colors.green;
-    } else if (speed < 60) {
-      result = Colors.blue;
-    } else if (speed < 80) {
-      result = Colors.amber;
-    } else if (speed > 80) {
-      result = Colors.red;
-    }
-    return result;
-  }
-
-  TextStyle dsStyleText(double? fontSize) {
-    return TextStyle(
-        fontFamily: 'DS-Digital',
-        fontSize: fontSize,
-        fontWeight: FontWeight.bold,
-        color: speedColor(currentSpeed!));
   }
 
   @override
@@ -98,6 +71,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text("Speedometer?")),
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  box.write("historyMovement", []);
+                  historyMovement.clear();
+                });
+              },
+              icon: const Icon(Icons.delete_outline))
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -105,14 +88,14 @@ class _HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           Center(
             child: Column(children: [
-              Text("${mstoKmh(currentSpeed!)}", style: dsStyleText(100)),
-              Text("KM/J", style: dsStyleText(48)),
+              Text("${mstoKmh(currentSpeed!)}",
+                  style: dsStyleText(100, currentSpeed)),
+              Text("KM/J", style: dsStyleText(48, currentSpeed)),
             ]),
           ),
           Expanded(
               child: Center(
             child: ListView.builder(
-              reverse: true,
               itemCount: historyMovement.length,
               itemBuilder: (context, index) {
                 Map movment = historyMovement[index];
