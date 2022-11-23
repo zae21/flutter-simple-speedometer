@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-double mstoKmh(double speed) {
+String mstoKmh(double speed) {
   double conversion = 3.6;
   double result = speed * conversion;
-  return result;
+  return result.toStringAsFixed(2);
 }
 
 Color speedColor(double speed) {
