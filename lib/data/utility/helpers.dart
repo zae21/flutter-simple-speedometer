@@ -7,8 +7,10 @@ String mstoKmh(double speed) {
 }
 
 Color speedColor(double speed) {
-  Color result = Colors.black;
-  if (speed < 40) {
+  Color result = Colors.white;
+  if (speed < 10) {
+    result = Colors.white;
+  } else if (speed < 40) {
     result = Colors.green;
   } else if (speed < 60) {
     result = Colors.blue;
