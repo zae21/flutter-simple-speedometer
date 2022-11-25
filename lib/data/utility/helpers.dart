@@ -27,3 +27,42 @@ TextStyle dsStyleText(double? fontSize, double? f) {
       fontWeight: FontWeight.bold,
       color: speedColor(f!));
 }
+
+Widget pageWrapper(
+    {PreferredSizeWidget? appBar,
+    Widget? child,
+    Widget? bottomNav,
+    ScrollPhysics? physics}) {
+  return Scaffold(
+      appBar: appBar,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {
+            return SingleChildScrollView(
+              physics: physics,
+              child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: viewportConstraints.maxHeight,
+                  ),
+                  child: child),
+            );
+          },
+        ),
+      ),
+      bottomNavigationBar: bottomNav);
+}
+
+Container btnLodingIndikator({Color? color}) {
+  color = color ?? Colors.white;
+  // ignore: avoid_unnecessary_containers
+  return Container(
+      child: Center(
+    child: SizedBox(
+      height: 30.0,
+      width: 30.0,
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(color),
+      ),
+    ),
+  ));
+}

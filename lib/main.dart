@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'dart:developer' as developer;
+import 'package:bg_service/app_routes.dart';
+import 'package:bg_service/modules/device_info/controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:bg_service/modules/home/screen.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+  Get.put(DeviceInfoController());
   runZonedGuarded(() {
     runApp(const MyApp());
   }, (dynamic error, dynamic stack) {
@@ -17,16 +21,21 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Background Service',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomeScreen(),
+    return GetMaterialApp(
+      builder: (context, child) => ResponsiveWrapper.builder(child,
+          maxWidth: 1200,
+          minWidth: 480,
+          defaultScale: true,
+          breakpoints: const [
+            ResponsiveBreakpoint.resize(480, name: MOBILE),
+            ResponsiveBreakpoint.autoScale(800, name: TABLET),
+            ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+          ],
+          background: Container(color: const Color(0xFFF5F5F5))),
+      getPages: AppRouter.pages,
+      initialRoute: '/',
     );
   }
 }
